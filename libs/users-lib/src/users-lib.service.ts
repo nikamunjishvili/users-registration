@@ -1,52 +1,14 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JwtService } from '@nestjs/jwt';
-import { CreateUserInterface } from './interfaces';
-import { RegisterUserSuccessResponseInterface } from './interfaces/register-user-success-response.interface';
 import { User } from './user.entity';
-import { UserFindCheckError, RegisterUserEmailCheckError } from './errors';
+import { UserFindCheckError } from './errors';
 
 @Injectable()
 export class UsersLibService {
-  constructor(
-    @InjectRepository(User) private repo: Repository<User>,
-    private jwtService: JwtService,
-  ) {}
+  constructor(@InjectRepository(User) private repo: Repository<User>) {}
   getAllUsers() {
     return this.repo.find();
-  }
-
-  async registerUser(
-    cretentials: CreateUserInterface,
-  ): Promise<RegisterUserSuccessResponseInterface> {
-    const { firstName, lastName, phoneNumber, email, password } = cretentials;
-
-    const existingUser = await this.repo.findOne({ where: { email } });
-
-    if (existingUser) {
-      throw new ConflictException(RegisterUserEmailCheckError.message);
-    }
-
-    const user = this.repo.create({
-      firstName,
-      lastName,
-      phoneNumber,
-      email,
-      password,
-    });
-
-    const savedUser = await this.repo.save(user);
-
-    const payload = { sub: savedUser.id };
-
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
   }
 
   findOne(id: number) {
