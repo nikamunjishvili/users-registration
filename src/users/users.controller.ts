@@ -4,20 +4,17 @@ import {
   Delete,
   Get,
   Param,
-  Post,
   NotFoundException,
   UseInterceptors,
   ClassSerializerInterceptor,
   Put,
-  HttpCode,
-  HttpStatus,
 } from '@nestjs/common';
 import { UsersLibService } from 'libs/users-lib';
 import {
   ChangePasswordDto,
-  CreateUserDto,
   UpdateUserDto,
 } from 'libs/users-lib/dto';
+import { UserFindCheckError } from 'libs/users-lib/errors';
 
 @Controller('/api/users')
 export class UsersController {
@@ -28,35 +25,28 @@ export class UsersController {
     return this.usersService.getAllUsers();
   }
 
-  // @UseGuards(AuthGuard)
-  @HttpCode(HttpStatus.OK)
-  @Post('/signup')
-  async registerUser(@Body() body: CreateUserDto) {
-    return this.usersService.registerUser(body);
-  }
-
   @UseInterceptors(ClassSerializerInterceptor)
-  @Get('users/:id')
+  @Get('/:id')
   findUsers(@Param() id: string) {
     const user = this.usersService.findOne(parseInt(id));
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(UserFindCheckError);
     }
     return user;
   }
 
-  @Delete('users/:id')
+  @Delete('/:id')
   removeUser(@Param('id') id: string) {
     return this.usersService.remove(parseInt(id));
   }
 
-  @Put('users/:id')
+  @Put('/:id')
   updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
     return this.usersService.update(parseInt(id), body);
   }
 
-  @Put('users/change-password/:id')
+  @Put('/change-password/:id')
   changePassword(
     @Param('id') id: string,
     @Body() changePasswordDto: ChangePasswordDto,
