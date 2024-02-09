@@ -24,6 +24,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/auth-lib/tsconfig.lib.json"
       }
+    },
+    "posts": {
+      "type": "library",
+      "root": "libs/posts",
+      "entryFile": "index",
+      "sourceRoot": "libs/posts/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/posts/tsconfig.lib.json"
+      }
     }
   }
 }

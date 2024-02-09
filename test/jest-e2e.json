@@ -14,6 +14,8 @@
     "libs/users-lib/(.*)": "<rootDir>/../libs/users-lib/src/$1",
     "libs/users-lib": "<rootDir>/../libs/users-lib/src",
     "libs/auth-lib/(.*)": "<rootDir>/../libs/auth-lib/src/$1",
-    "libs/auth-lib": "<rootDir>/../libs/auth-lib/src"
+    "libs/auth-lib": "<rootDir>/../libs/auth-lib/src",
+    "libs/posts/(.*)": "<rootDir>/../libs/posts/src/$1",
+    "libs/posts": "<rootDir>/../libs/posts/src"
   }
 }
